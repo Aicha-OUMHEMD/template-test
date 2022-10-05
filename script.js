@@ -46,12 +46,32 @@ async function getQuotes() {
     loading();
    const apiUrl = 'https://type.fit/api/quotes';
    try {
-       const response = await fetch(apiUrl);
-       apiQuotes = await response.json();
-       newQuote();
+        const response = await fetch(apiUrl);
+        apiQuotes = await response.json();
+        if(apiQuotes.error) {
+            console.log("error connection", apiQuotes.error.message);
+        }else if(apiQuotes.length == 0) {
+            console.log("error connection", "l'api est vide");
+        }else {
+            newQuote();
+        }
        } catch(error){
        // Catch Error Here
-   }
+       if (error instanceof TypeError) {
+        console.log("error connection", "TypeError");
+      } else if (error instanceof RangeError) {
+        console.log("error connection", "RangeError");
+      } else if (error instanceof EvalError) {
+        console.log("error connection", "EvalError");
+      } else if (error instanceof SyntaxError) {
+        console.log("error connection", "SyntaxError ...");
+      } else {
+        // statements to handle any unspecified exceptions
+        logMyErrors(error); // pass exception object to error handler
+        console.log("error connection", error.message);
+      }
+      
+    }
 }
 
 
